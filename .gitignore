@@ -1,0 +1,14 @@
+# macOS
+.DS_Store
+
+# Editors
+.vscode/
+.idea/
+*.swp
+
+# Headroom local data (created if the memory DB is bind-mounted instead of a volume)
+.headroom/
+
+# Local env overrides
+.env
+.env.local
