@@ -12,7 +12,7 @@ PORT="${HEADROOM_PORT:-8787}"
 # Output-shaper verbosity level (0-4) applied to ALL projects. Overrides the
 # per-project levels from `headroom learn --verbosity`. Override per-run with:
 # HEADROOM_VERBOSITY_LEVEL=2 ./start-headroom.sh
-VERBOSITY_LEVEL="${HEADROOM_VERBOSITY_LEVEL:-3}"
+VERBOSITY_LEVEL="${HEADROOM_VERBOSITY_LEVEL:-2}"
 
 # Always fetch the newest published image. `docker pull` on a :latest tag is a
 # no-op when already current and downloads the new layers otherwise. Don't abort

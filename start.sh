@@ -8,8 +8,8 @@ docker build -t headroom-local .
 
 # Output-shaper verbosity level (0-4) applied to ALL projects. Overrides the
 # per-project levels from `headroom learn --verbosity`. Override per-run with:
-# HEADROOM_VERBOSITY_LEVEL=2 ./start.sh
-VERBOSITY_LEVEL="${HEADROOM_VERBOSITY_LEVEL:-3}"
+# HEADROOM_VERBOSITY_LEVEL=1 ./start.sh
+VERBOSITY_LEVEL="${HEADROOM_VERBOSITY_LEVEL:-2}"
 
 # One-shot self-heal: seed the output-savings baseline so the dashboard can
 # measure reduction immediately (without it the dashboard shows "run headroom
