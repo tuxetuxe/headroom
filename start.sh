@@ -37,6 +37,7 @@ docker run -p 8787:8787 \
   -e HEADROOM_OUTPUT_SHAPER=1 \
   -e HEADROOM_MEMORY_DB_PATH=/root/.headroom/memory.db \
   -e HEADROOM_PUBLIC_PORT=8787 \
+  -e HEADROOM_HTTP2="${HEADROOM_HTTP2:-0}" \
   -v headroom-memory:/root/.headroom \
   -v "${HOME}/.claude:/root/.claude:ro" \
   headroom-local
