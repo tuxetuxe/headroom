@@ -1,10 +1,25 @@
 #!/bin/bash
 set -e
 
-# Pull the latest base image, then build a thin image on top that adds the
-# "code" + "memory" extras and the loopback relay for the live-message feed.
-docker pull ghcr.io/chopratejas/headroom:latest
-docker build -t headroom-local .
+# Build the image directly from a clean Python base + the latest headroom-ai
+# wheel from PyPI (no dependency on the infrequently-republished upstream image).
+#
+# Resolve the newest headroom-ai version and pass it as a build arg. This is the
+# cache-bust: when the version is unchanged the pip layer stays cached (fast
+# rebuild); when upstream releases a new version the arg changes and only the
+# affected layers rebuild. Override/pin with:  HEADROOM_VERSION=0.30.0 ./start.sh
+# If the lookup fails (e.g. offline), fall back to "latest" (empty arg), which
+# builds fresh or reuses whatever is cached.
+if [ -z "${HEADROOM_VERSION:-}" ]; then
+  HEADROOM_VERSION="$(curl -fsSL https://pypi.org/pypi/headroom-ai/json 2>/dev/null \
+    | python3 -c 'import sys,json; print(json.load(sys.stdin)["info"]["version"])' 2>/dev/null || true)"
+fi
+if [ -n "${HEADROOM_VERSION}" ]; then
+  echo "Building headroom-local with headroom-ai==${HEADROOM_VERSION}"
+else
+  echo "warning: could not resolve latest headroom-ai version; building with latest/cached." >&2
+fi
+docker build --build-arg HEADROOM_VERSION="${HEADROOM_VERSION}" -t headroom-local .
 
 # Output-shaper verbosity level (0-4) applied to ALL projects. Overrides the
 # per-project levels from `headroom learn --verbosity`. Override per-run with:

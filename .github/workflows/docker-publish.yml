@@ -42,12 +42,22 @@ jobs:
             type=semver,pattern={{version}}
             type=sha,format=short
 
+      - name: Resolve latest headroom-ai version
+        id: headroom
+        run: |
+          version="$(curl -fsSL https://pypi.org/pypi/headroom-ai/json \
+            | python3 -c 'import sys,json; print(json.load(sys.stdin)["info"]["version"])')"
+          echo "version=${version}" >> "$GITHUB_OUTPUT"
+          echo "Building with headroom-ai==${version}"
+
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
           context: .
           platforms: linux/arm64
           push: true
+          build-args: |
+            HEADROOM_VERSION=${{ steps.headroom.outputs.version }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
